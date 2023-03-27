@@ -1,5 +1,41 @@
-.login-wrapper {
+.login-wrapper, .login-wrapper>div, .login-wrapper form {
     display: flex;
     flex-direction: column;
+}
+
+.login-wrapper {
+    background-color: rgb(253, 242, 229);
+    height: 100vh;
     align-items: center;
+    justify-content: center;
+}
+
+.login-wrapper>div { 
+    height: 50%;
+    align-items: center;
+    margin-bottom: 100px;
+    background-color: rgb(233, 220, 204);
+    padding: 5vh 10vw;
+    border-radius: 10px;
+}
+
+.login-wrapper h2 {
+    color: rgb(81, 81, 81);
+    font-size: 32px;
+    margin-bottom: 10vh;
+    cursor: pointer;
+}
+
+.buttons {
+    margin-top: 25px;
+    display: flex;
+    justify-content: space-between;
+}
+
+.inp {
+    margin-bottom: 25px;
+}
+
+#role-lbl {
+    margin-top: 25px;
 }

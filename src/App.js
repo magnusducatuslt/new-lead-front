@@ -1,12 +1,14 @@
 import React, { useState } from "react";
 import "./App.css";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { createTheme, ThemeProvider, styled } from '@mui/material/styles';
 import Login from "./pages/Login/Login";
 import Dashboard from "./pages/Dashboard/Dashboard";
 import Preferences from "./pages/Preferences/Preferences";
 
 function App() {
   const user = localStorage.getItem("user_platform");
+
   if (!user) {
     return <Login />;
   }
@@ -14,9 +16,12 @@ function App() {
   console.log(parsed);
   return (
     <div className="wrapper">
-      <h1>Application</h1>
       <BrowserRouter>
         <Routes>
+          <Route
+            path="/"
+            element={<Dashboard id={parsed.id} type={parsed.type} />}
+          ></Route>
           <Route
             path="/dashboard"
             element={<Dashboard id={parsed.id} type={parsed.type} />}

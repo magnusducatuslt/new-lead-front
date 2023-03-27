@@ -1,12 +1,16 @@
 import React, { useState } from "react";
+import FormControl from "@mui/material/FormControl";
+import Input from "@mui/material/Input";
+import FormControlLabel from "@mui/material/FormControlLabel";
+import FormLabel from "@mui/material/FormLabel";
+import Radio from "@mui/material/Radio";
+import RadioGroup from "@mui/material/RadioGroup";
+import Button from "@mui/material/Button";
 import axios from "axios";
 import "./Login.css";
 
 async function signIn(credentials) {
-  const response = await axios.post(
-    "http://localhost:5000/auth/find",
-    credentials
-  );
+  const response = await axios.post("http://localhost:7890/auth/find", credentials);
   if (response.data) {
     localStorage.setItem("user_platform", JSON.stringify(response.data));
     window.location.href = "/dashboard";
@@ -15,10 +19,7 @@ async function signIn(credentials) {
 }
 
 async function signUp(credentials) {
-  const response = await axios.post(
-    "http://localhost:5000/auth/create",
-    credentials
-  );
+  const response = await axios.post("http://localhost:7890/auth/create", credentials);
   if (response.data) {
     localStorage.setItem("user_platform", JSON.stringify(response.data));
     window.location.href = "/dashboard";
@@ -37,82 +38,104 @@ export default function Login() {
     <div className="login-wrapper">
       {isSignUp ? (
         <div>
-          <h1>Please Sign Up</h1>
+          <h2>Please Sign Up</h2>
           <form
             onSubmit={(e) => {
               e.preventDefault();
               signUp({ login: username, password, type });
             }}
           >
-            <label>
-              <p>Username</p>
-              <input
-                type="text"
-                onChange={(e) => setUserName(e.target.value)}
+            <Input
+              color="success"
+              className="inp"
+              placeholder="Username"
+              onChange={(e) => setUserName(e.target.value)}
+            />
+            <Input
+              color="success"
+              className="inp"
+              placeholder="Password"
+              type="password"
+              onChange={(e) => setPassword(e.target.value)}
+            />
+            <FormLabel id="role-lbl">Role: </FormLabel>
+            <RadioGroup row aria-labelledby="role-lbl" name="row-radio-buttons-group">
+              <FormControlLabel
+                value="teacher"
+                checked={type === "teacher" ? true : false}
+                onChange={() => setType("teacher")}
+                control={<Radio color="success" />}
+                label="Teacher"
               />
-            </label>
-            <label>
-              <p>Password</p>
-              <input
-                type="password"
-                onChange={(e) => setPassword(e.target.value)}
+              <FormControlLabel
+                value="consumer"
+                checked={type === "consumer" ? true : false}
+                onChange={() => setType("consumer")}
+                control={<Radio color="success" />}
+                label="Consumer"
               />
-            </label>
-            <label>
-              <p>Who you are</p>
-              <div>
-                <label>teacher</label>
-                <input
-                  type="radio"
-                  value="teacher"
-                  checked={type === "teacher" ? true : false}
-                  onChange={() => setType("teacher")}
-                />
-              </div>
-              <div>
-                <label>consumer</label>
-                <input
-                  type="radio"
-                  value="consumer"
-                  checked={type === "consumer" ? true : false}
-                  onChange={() => setType("consumer")}
-                />
-              </div>
-            </label>
-            <div>
-              <button type="submit">Submit</button>
+            </RadioGroup>
+            <div className="buttons">
+              <Button color="success" variant="text" onClick={() => setSignUp(false)}>
+                Sign in
+              </Button>
+              <Button color="success" type="submit" variant="contained">
+                {" "}
+                Submit{" "}
+              </Button>
             </div>
           </form>
-          <button onClick={() => setSignUp(false)}>Sign in</button>
         </div>
       ) : (
         <div>
-          <h1>Please Log In</h1>
+          <h2>Please Log In</h2>
           <form
             onSubmit={(e) => {
               e.preventDefault();
               signIn({ login: username, password });
             }}
           >
-            <label>
-              <p>Username</p>
-              <input
-                type="text"
-                onChange={(e) => setUserName(e.target.value)}
+            <Input
+              color="success"
+              className="inp"
+              placeholder="Username"
+              onChange={(e) => setUserName(e.target.value)}
+            />
+            <Input
+              color="success"
+              className="inp"
+              placeholder="Password"
+              onChange={(e) => setPassword(e.target.value)}
+            />
+            <FormLabel style={{ visibility: "hidden" }} id="role-lbl">
+              Role1:{" "}
+            </FormLabel>
+            <RadioGroup style={{ visibility: "hidden" }} row aria-labelledby="role-lbl" name="row-radio-buttons-group">
+              <FormControlLabel
+                value="teacher"
+                checked={type === "teacher" ? true : false}
+                onChange={() => setType("teacher")}
+                control={<Radio color="success" />}
+                label="Teacher"
               />
-            </label>
-            <label>
-              <p>Password</p>
-              <input
-                type="password"
-                onChange={(e) => setPassword(e.target.value)}
+              <FormControlLabel
+                value="consumer"
+                checked={type === "consumer" ? true : false}
+                onChange={() => setType("consumer")}
+                control={<Radio color="success" />}
+                label="Consumer"
               />
-            </label>
-            <div>
-              <button type="submit">Submit</button>
+            </RadioGroup>
+            <div className="buttons">
+              <Button color="success" variant="text" onClick={() => setSignUp(true)}>
+                Sign up
+              </Button>
+              <Button color="success" type="submit" variant="contained">
+                {" "}
+                Submit{" "}
+              </Button>
             </div>
           </form>
-          <button onClick={() => setSignUp(true)}>Sign up</button>
         </div>
       )}
     </div>

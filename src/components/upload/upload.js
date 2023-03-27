@@ -1,22 +1,24 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
+import Fab from "@mui/material/Fab";
+import AddIcon from "@mui/icons-material/Add";
 
-const URL = "http://localhost:5000";
+const URL = "http://localhost:7890";
 
-function FileUpload({ id }) {
+function FileUpload({ id, update }) {
   const [selectedFile, setSelectedFile] = useState(null);
+  const ref = useRef(null);
 
   const handleFileInputChange = (event) => {
     setSelectedFile(event.target.files[0]);
+    handleSubmit(event.target.files[0])
   };
 
-  const handleSubmit = (event) => {
-    event.preventDefault();
-
+  const handleSubmit = (file) => {
     // Create a new FormData object
     const formData = new FormData();
 
     // Append the selected file to the form data
-    formData.append("file", selectedFile);
+    formData.append("file", file);
 
     // Append the metadata to the form data
     formData.append("teacherId", id);
@@ -26,9 +28,8 @@ function FileUpload({ id }) {
       method: "POST",
       body: formData,
     })
-      .then((response) => {
-        // Handle the response from the server
-        console.log(response);
+      .then((response) => response.json()).then(data => {
+        update(data);
       })
       .catch((error) => {
         // Handle errors that occur during the upload process
@@ -38,12 +39,19 @@ function FileUpload({ id }) {
 
   return (
     <form onSubmit={handleSubmit}>
-      <label>
-        Choose a file:
-        <input type="file" onChange={handleFileInputChange} />
+      <label for="file-input">
+        <Fab
+          color="success"
+          aria-label="add"
+          onClick={() => {
+            ref.current.click();
+          }}
+        >
+          <AddIcon />
+        </Fab>
       </label>
+      <input ref={ref} name="file-input" id="file-input" style={{ display: "none" }} type="file" onChange={handleFileInputChange} />
       <br />
-      <button type="submit">Submit</button>
     </form>
   );
 }

@@ -2,27 +2,18 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import Consumer from "./Consumer";
 import Admin from "./Admin";
+import "./Dashboard.css";
 
-const URL = "http://localhost:5000";
+const URL = "http://localhost:7890";
 
 export default function Dashboard({ id, type }) {
   return (
-    <div>
-      <h2>Dashboard</h2>
+    <div className="dashboard">
       {type === "teacher" ? (
-        <Admin teacherId={id} />
+        <Admin teacherId={id} type={type} />
       ) : (
         <Consumer consumerId={id} />
       )}
-      <br />
-      <button
-        onClick={() => {
-          localStorage.clear();
-          window.location.href = "/";
-        }}
-      >
-        logout
-      </button>
     </div>
   );
 }
